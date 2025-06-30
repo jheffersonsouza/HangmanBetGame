@@ -8,7 +8,7 @@ from time import sleep
 # sanitizar todos os input e garantir que os de letra desconsidere acentos
 # fazer um sistema que mostre a forca
 # TODO nova: fazer uma var streak, que aumente conforme o jogador ganhe e faça ele perder conforme vai ganhando
-
+# TODO: Modo de x1 entre duas pessoas
 
 def remover_acentos(string):
     nfkd = unicodedata.normalize('NFKD', string)
@@ -57,43 +57,25 @@ streak = 1
 while True:
     money = int(input('Digite o valor a aposta R$'))
     chance = 6
+    win = False
+
     while money <= 0:
         print('Digite um valor valido.')
         money = int(input('Digite o valor a aposta R$'))
     print('Sorteando uma palavra com base em seu bônus de sorte...')
     sleep(1)
+
     if money >= 50:
         diff = 2
     else:
         diff = 1
     word = randomWord(diff + streak // 3)
     # Cheat
-    print(word)
+    #print(word)
     display_word = word
     word = remover_acentos(word)
     known_chars = []
-    win = False
     while chance != 0:
-        letter = '-1'
-        if chance == 1:
-            last_try = str(input('Última tentativa, diga qual é a palavra: '))
-            if remover_acentos(last_try) == word:
-                win = True
-                chance = 0
-                break
-            else:
-                chance = 0
-                break
-                """
-                if len(last_try) == 1:
-                    #FIXME: O dislay das letras é depois de testar se a letra ta na palavra.
-                    letter = last_try
-                    pass
-                else:
-                    chance = 0
-                    break
-                 """
-
         print('-' * (8 + 1 + 2 + 2 * len(display_word)))
         printHang(chance)
         print('Palavra:', end=' ')
@@ -104,13 +86,14 @@ while True:
                 print('_', end=' ')
         print('')
         print('-' * (8 + 1 + 2 + 2 * len(display_word)))
-
-        if letter == '-1':
-            letter = str(input('Tente uma letra ou a palvra toda:')).strip().lower()
+        if chance == 1:
+            letter = str(input('Ultima tentativa diga a palavra ou tenta uma letra:')).strip().lower()
+        else:
+            letter = str(input('Digite uma letra ou uma palavra:')).strip().lower()
         letter = remover_acentos(letter)
 
         if len(letter) == 0:
-            print('Entrada invalida, tente somente uma letra!')
+            print('Entrada invalida, tente somente uma letra ou uma palavra!')
             sleep(1)
             continue
         if len(letter) > 1:
